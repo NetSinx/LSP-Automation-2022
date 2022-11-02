@@ -228,7 +228,7 @@ echo -e "
         #Include conf-available/serve-cgi-bin.conf
 </VirtualHost>
 
-# vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/sites-available/pma.conf
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/sites-available/www.conf
 echo -e "
 <VirtualHost *:80>
         # The ServerName directive sets the request scheme, hostname and port that
@@ -294,7 +294,7 @@ echo -e "
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/sites-available/cacti.conf
 
-a2ensite mail.conf pma.conf cacti.conf
+a2ensite mail.conf www.conf cacti.conf
 a2dissite 000-default.conf
 systemctl restart apache2
 
@@ -318,6 +318,10 @@ else
     done
 fi
 
+chown -R www-data:www-data /var/www/wordpress
+chown -R www-data:www-data /var/www/phpmyadmin
+
+mysql -e "create database wordpress;"
 mysql -s < pma.sql
 mysql -s phpmyadmin < /var/www/phpmyadmin/sql/create_tables.sql
 
