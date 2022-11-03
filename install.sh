@@ -1,4 +1,6 @@
 #!/bin/bash
+clear
+
 GREEN="\033[32m"
 echo -e "${GREEN}============= Selamat Datang di Quick Install LSP 2022 ================\033[0m\n"
 sleep 2
