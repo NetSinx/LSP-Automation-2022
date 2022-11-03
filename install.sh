@@ -185,8 +185,8 @@ echo -e "======= STEP 3 - INSTALASI & KONFIGURASI LAMP ======="
 sleep 2
 echo -e "Sedang menginstall & konfigurasi paket-paket untuk LAMP, dimohon tunggu...\n"
 apt install -y apache2 libapache2-mod-php php php-mysql php-xml php-mbstring php-cgi mariadb-server mariadb-client > /dev/null 2>&1
-wget -q -nc -O phpmyadmin.tar.gz https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.tar.gz -d /var/www/
-wget -q -nc -O wordpress.tar.gz https://wordpress.org/wordpress-6.0.3.tar.gz -d /var/www/
+wget -q -O phpmyadmin.tar.gz https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.tar.gz -d /var/www/
+wget -q -O wordpress.tar.gz https://wordpress.org/wordpress-6.0.3.tar.gz -d /var/www/
 tar -zxf /var/www/phpmyadmin.tar.gz
 tar -zxf /var/www/wordpress.tar.gz
 mv phpMyAdmin-5.2.0-all-languages phpmyadmin
