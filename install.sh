@@ -84,7 +84,7 @@ apt install -y bind9 dnsutils resolvconf > /dev/null 2>&1
 echo -e "\nInstalasi selesai!\n"
 read -p "Masukkan nama file database forward (contoh: db.<nama>): " dbForward
 read -p "Masukkan nama file database reverse (contoh: db.<ip>): " dbReverse
-read -p "Masukkan nama domain yang ingin dibuat (contoh: smk<nis>.net): " namaDomain
+read -p "Masukkan nama domain yang ingin dibuat (contoh: <nis>.net): " namaDomain
 echo -e "Mohon tunggu, sedang melakukan konfigurasi DNS Server...\n"
 cp /etc/bind/db.local /etc/bind/$dbForward
 cp /etc/bind/db.127 /etc/bind/$dbReverse
@@ -190,7 +190,7 @@ wget -q -O wordpress.tar.gz https://wordpress.org/wordpress-6.0.3.tar.gz
 tar -zxf phpmyadmin.tar.gz
 tar -zxf wordpress.tar.gz
 mv phpMyAdmin-5.2.0-all-languages /var/www/phpmyadmin
-mv wordpress /var/www/wordpress
+mv wordpress /var/www/
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/mail.conf
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/pma.conf
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/cacti.conf
@@ -356,3 +356,7 @@ sed -i "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['designer_settings'\] = 'pma__designer
 sed -i "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['export_templates'\] = 'pma__export_templates'\;/\$cfg\['Servers'\]\[\$i\]\['export_templates'\] = 'pma__export_templates'\;/" /var/www/phpmyadmin/config.inc.php
 
 echo -e "\nInstalasi & konfigurasi paket-paket LAMP telah selesai!\n"
+
+echo -e "======= STEP 4 - INSTALASI & KONFIGURASI MAIL ========\n"
+echo "Sedang melakukan instalasi & konfigurasi mail server..."
+apt install -y postfix dovecot-imapd dovecot-pop3d roundcube < /dev/null 2>&1
