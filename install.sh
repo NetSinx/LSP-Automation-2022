@@ -80,7 +80,7 @@ revIP=$(echo $ipDebian | awk -F. '{print $4"."$3"."$2"."$1}' | cut -d '.' -f 2-4
 echo -e "\n======= STEP 2 - KONFIGURASI DNS SERVER ========"
 sleep 2
 echo -e "Sedang melakukan instalasi paket-paket DNS Server dimohon tunggu...\n"
-apt-get install -y -qq bind9 dnsutils resolvconf
+apt install -y bind9 dnsutils resolvconf > /dev/null 2>&1
 echo -e "\nInstalasi selesai!\n"
 read -p "Masukkan nama file database forward (contoh: db.<nama>): " dbForward
 read -p "Masukkan nama file database reverse (contoh: db.<ip>): " dbReverse
@@ -184,7 +184,7 @@ echo -e "Konfigurasi DNS Server telah selesai!\n"
 echo -e "======= STEP 3 - INSTALASI & KONFIGURASI LAMP ======="
 sleep 2
 echo -e "Sedang menginstall & konfigurasi paket-paket untuk LAMP, dimohon tunggu...\n"
-apt-get install -qq -y apache2 libapache2-mod-php php php-mysql php-xml php-mbstring php-cgi mariadb-server mariadb-client
+apt install -y apache2 libapache2-mod-php php php-mysql php-xml php-mbstring php-cgi mariadb-server mariadb-client > /dev/null 2>&1
 wget -q -nc -O phpmyadmin.tar.gz https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.tar.gz
 wget -q -nc -O wordpress.tar.gz https://wordpress.org/wordpress-6.0.3.tar.gz
 tar -zxf phpmyadmin.tar.gz
