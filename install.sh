@@ -294,8 +294,8 @@ echo -e "
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/sites-available/cacti.conf
 
-a2ensite mail.conf www.conf cacti.conf
-a2dissite 000-default.conf
+a2ensite mail.conf www.conf cacti.conf > /dev/null
+a2dissite 000-default.conf > /dev/null
 systemctl restart apache2
 
 cp /var/www/phpmyadmin/config.sample.inc.php /var/www/phpmyadmin/config.inc.php
@@ -306,7 +306,7 @@ read -p "Masukkan password konfirmasi untuk nama user database: " passDbConfirm
 
 if [ $passDb == $passDbConfirm ];
 then
-echo "create database phpmyadmin;
+echo "create database if not exists phpmyadmin;
 grant all privileges on *.* to '"$userDb"'@'localhost' identified by '"$passDb"' with grant option;
 grant all privileges on phpmyadmin.* to 'pma'@'localhost' identified by '1';" > pma.sql
 else
@@ -321,7 +321,7 @@ fi
 chown -R www-data:www-data /var/www/wordpress
 chown -R www-data:www-data /var/www/phpmyadmin
 
-mysql -e "create database wordpress;"
+mysql -e "create database if not exists wordpress;"
 mysql -s < pma.sql
 mysql -s phpmyadmin < /var/www/phpmyadmin/sql/create_tables.sql
 
