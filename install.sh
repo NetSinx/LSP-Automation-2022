@@ -80,7 +80,7 @@ revIP=$(echo $ipDebian | awk -F. '{print $4"."$3"."$2"."$1}' | cut -d '.' -f 2-4
 echo -e "\n======= STEP 2 - KONFIGURASI DNS SERVER ========"
 sleep 2
 echo -e "Sedang melakukan instalasi paket-paket DNS Server dimohon tunggu...\n"
-apt install -y bind9 dnsutils resolvconf > /dev/null 2>&1
+apt-get install -qq -y bind9 dnsutils resolvconf
 echo -e "\nInstalasi selesai!\n"
 read -p "Masukkan nama file database forward (contoh: db.<nama>): " dbForward
 read -p "Masukkan nama file database reverse (contoh: db.<ip>): " dbReverse
@@ -184,7 +184,7 @@ echo -e "Konfigurasi DNS Server telah selesai!\n"
 echo -e "======= STEP 3 - INSTALASI & KONFIGURASI LAMP ======="
 sleep 2
 echo -e "Sedang menginstall & konfigurasi paket-paket untuk LAMP, dimohon tunggu...\n"
-apt install -y apache2 libapache2-mod-php php php-mysql php-xml php-mbstring php-cgi mariadb-server mariadb-client > /dev/null 2>&1
+apt-get install -qq -y apache2 libapache2-mod-php php php-mysql php-xml php-mbstring php-cgi mariadb-server mariadb-client
 wget -q -O phpmyadmin.tar.gz https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.tar.gz
 wget -q -O wordpress.tar.gz https://wordpress.org/wordpress-6.0.3.tar.gz
 tar -zxf phpmyadmin.tar.gz
@@ -359,4 +359,4 @@ echo -e "\nInstalasi & konfigurasi paket-paket LAMP telah selesai!\n"
 
 echo -e "======= STEP 4 - INSTALASI & KONFIGURASI MAIL ========\n"
 echo "Sedang melakukan instalasi & konfigurasi mail server..."
-apt install -y postfix dovecot-imapd dovecot-pop3d roundcube < /dev/null 2>&1
+apt-get install -qq -y postfix dovecot-imapd dovecot-pop3d roundcube
