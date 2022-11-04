@@ -370,8 +370,8 @@ sed -i "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['designer_settings'\] = 'pma__designer
 sed -i "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['export_templates'\] = 'pma__export_templates'\;/\$cfg\['Servers'\]\[\$i\]\['export_templates'\] = 'pma__export_templates'\;/" /var/www/phpmyadmin/config.inc.php
 
 sed -i "s/define( 'DB_NAME', 'database_name_here' )\;/define( 'DB_NAME', 'wordpress' )\;/" /var/www/wordpress/wp-config.php
-sed -i "s/define( 'DB_NAME', 'username_here' )\;/define( 'DB_NAME', 'admin' )\;/" /var/www/wordpress/wp-config.php
-sed -i "s/define( 'DB_NAME', 'password_here' )\;/define( 'DB_NAME', '123' )\;/" /var/www/wordpress/wp-config.php
+sed -i "s/define( 'DB_USER', 'username_here' )\;/define( 'DB_USER', 'admin' )\;/" /var/www/wordpress/wp-config.php
+sed -i "s/define( 'DB_PASSWORD', 'password_here' )\;/define( 'DB_PASSWORD', '123' )\;/" /var/www/wordpress/wp-config.php
 
 echo -e "\nInstalasi & konfigurasi paket-paket LAMP telah selesai!\n"
 
