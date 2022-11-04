@@ -3,7 +3,7 @@ clear
 
 GREEN="\033[32m"
 echo -e "${GREEN}============= Selamat Datang di Quick Install LSP 2022 ================\033[0m\n"
-sleep 2
+sleep 1
 
 # Konfigurasi IP Address
 echo "======= STEP 1 - KONFIGURASI NETWORK DEBIAN ========"
@@ -78,7 +78,7 @@ ptrIpvoip=$(echo $ipVoIP | awk -F. '{print $4"."$3"."$2"."$1}' | cut -d '.' -f 1
 revIP=$(echo $ipDebian | awk -F. '{print $4"."$3"."$2"."$1}' | cut -d '.' -f 2-4)
 
 echo -e "\n======= STEP 2 - KONFIGURASI DNS SERVER ========"
-sleep 2
+sleep 1
 echo -e "Sedang melakukan instalasi paket-paket DNS Server dimohon tunggu...\n"
 apt-get install -qq -y bind9 dnsutils resolvconf
 echo -e "\nInstalasi selesai!\n"
@@ -182,24 +182,37 @@ resolvconf -u
 echo -e "Konfigurasi DNS Server telah selesai!\n"
 
 echo -e "======= STEP 3 - INSTALASI & KONFIGURASI LAMP ======="
-sleep 2
+sleep 1
 echo -e "Sedang menginstall & konfigurasi paket-paket untuk LAMP, dimohon tunggu...\n"
 apt-get install -qq -y apache2 libapache2-mod-php php php-mysql php-xml php-mbstring php-cgi mariadb-server mariadb-client
-wget -q -O phpmyadmin.tar.gz https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.tar.gz
-wget -q -O wordpress.tar.gz https://wordpress.org/wordpress-6.0.3.tar.gz
-tar -zxf phpmyadmin.tar.gz
-tar -zxf wordpress.tar.gz
-mv phpMyAdmin-5.2.0-all-languages /var/www/phpmyadmin
-mv wordpress /var/www/
+
+checkWp=$(ls /var/www/ | grep wordpress)
+checkPma=$(ls /var/www/ | grep phpmyadmin)
+if [[ ! $checkWp && ! $checkPma ]];
+then
+    wget -q https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.tar.gz
+    wget -q https://wordpress.org/wordpress-6.0.3.tar.gz
+    tar -zxf phpMyAdmin-5.2.0-all-languages.tar.gz
+    tar -zxf wordpress-6.0.3.tar.gz
+    mv phpMyAdmin-5.2.0-all-languages /var/www/phpmyadmin
+    mv wordpress /var/www/
+fi
+
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/mail.conf
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/pma.conf
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/cacti.conf
+
+checkVarLib=$(cat /etc/apache2/apache2.conf | grep "<Directory /var/lib/>")
+if [[ ! $checkVarLib ]];
+then
 echo "
 <Directory /var/lib/>
-        Options -Indexes +FollowSymLinks
-        AllowOverride All
-        Require all granted
+      Options -Indexes +FollowSymLinks
+      AllowOverride All
+      Require all granted
 </Directory>" >> /etc/apache2/apache2.conf
+fi
+
 echo -e "
 <VirtualHost *:80>
         # The ServerName directive sets the request scheme, hostname and port that
