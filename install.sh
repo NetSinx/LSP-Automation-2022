@@ -341,7 +341,7 @@ fi
 chown -R www-data:www-data /var/www/wordpress
 chown -R www-data:www-data /var/www/phpmyadmin
 
-mysql -e "create database if not exists wordpress;"
+mysql -e "create database if not exists $namaDb;"
 mysql -s < pma.sql
 mysql -s phpmyadmin < /var/www/phpmyadmin/sql/create_tables.sql
 
