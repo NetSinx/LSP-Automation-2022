@@ -401,6 +401,7 @@ apt-get install -qq -y cacti snmp snmpd rrdtool
 
 chown -R www-data:www-data /usr/share/cacti
 sed -i "s/agentaddress  127.0.0.1,\[\:\:1\]/agentaddress  udp\:$ipDebian\:161/" /etc/snmp/snmpd.conf
+echo "rocommunity public "$ipDebian"" >> /etc/snmp/snmpd.conf
 systemctl restart snmpd
 
 echo -e "\nInstalasi & konfigurasi paket-paket cacti telah selesai!\n"
