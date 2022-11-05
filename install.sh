@@ -378,3 +378,28 @@ echo -e "\nInstalasi & konfigurasi paket-paket LAMP telah selesai!\n"
 echo -e "======= STEP 4 - INSTALASI & KONFIGURASI MAIL ========\n"
 echo "Sedang melakukan instalasi & konfigurasi mail server..."
 apt-get install -qq -y postfix dovecot-imapd dovecot-pop3d roundcube
+
+echo "home_mailbox = Maildir/" >> /etc/postfix/main.cf
+sed -i "s/\#disable_plaintext_auth = yes/disable_plaintext_auth = yes/" /etc/dovecot/conf.d/10-auth.conf
+sed -i "s/\#   mail_location = maildir\:\~\/Maildir/mail_location = maildir\:\~\/Maildir/" /etc/dovecot/conf.d/10-mail.conf
+sed -i "s/mail_location = mbox\:\~\/mail\:INBOX=\/var\/mail\/\%u/mail_location = mbox\:\~\/mail\:INBOX=\/var\/mail\/\%u/" /etc/dovecot/conf.d/10-mail.conf
+
+systemctl restart postfix dovecot
+
+sed -i "s/\$config\['default_host'\] = ''\;/\$config\['default_host'\] = '$namaDomain'\;/" /etc/roundcube/config.inc.php
+sed -i "s/\$config\['smtp_server'\] = 'localhost'\;/\$config\['smtp_server'\] = '$namaDomain'\;/" /etc/roundcube/config.inc.php
+sed -i "s/\$config\['smtp_port'\] = 587\;/\$config\['smtp_port'\] = 25\;/" /etc/roundcube/config.inc.php
+sed -i "s/\$config\['smtp_user'\] = '\%u'\;/\$config\['smtp_user'\] = ''\;/" /etc/roundcube/config.inc.php
+sed -i "s/\$config\['smtp_pass'\] = '\%p'\;/\$config\['smtp_pass'\] = ''\;/" /etc/roundcube/config.inc.php
+
+echo -e "\nInstalasi & konfigurasi paket-paket mail server telah selesai!\n"
+
+echo -e "======= STEP 5 - INSTALASI & KONFIGURASI CACTI ========\n"
+echo "Sedang melakukan instalasi & konfigurasi cacti..."
+apt-get install -qq -y cacti snmp snmpd rrdtool
+
+chown -R www-data:www-data /usr/share/cacti
+sed -i "s/agentaddress  127.0.0.1,\[\:\:1\]/agentaddress  udp\:$ipDebian\:161/" /etc/snmp/snmpd.conf
+systemctl restart snmpd
+
+echo -e "\nInstalasi & konfigurasi paket-paket cacti telah selesai!\n"
