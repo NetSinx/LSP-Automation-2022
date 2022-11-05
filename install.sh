@@ -319,6 +319,7 @@ cp /var/www/phpmyadmin/config.sample.inc.php /var/www/phpmyadmin/config.inc.php
 cp /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
 
 echo ""
+read -p "Masukkan nama database untuk wordpress: " namaDb
 read -p "Masukkan nama user untuk database (contoh: yasin): " userDb
 read -p "Masukkan password untuk nama user database: " passDb
 read -p "Masukkan password konfirmasi untuk nama user database: " passDbConfirm
@@ -370,9 +371,9 @@ sed -i "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['central_columns'\] = 'pma__central_co
 sed -i "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['designer_settings'\] = 'pma__designer_settings'\;/\$cfg\['Servers'\]\[\$i\]\['designer_settings'\] = 'pma__designer_settings'\;/" /var/www/phpmyadmin/config.inc.php
 sed -i "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['export_templates'\] = 'pma__export_templates'\;/\$cfg\['Servers'\]\[\$i\]\['export_templates'\] = 'pma__export_templates'\;/" /var/www/phpmyadmin/config.inc.php
 
-sed -i "s/define( 'DB_NAME', 'database_name_here' )\;/define( 'DB_NAME', 'wordpress' )\;/" /var/www/wordpress/wp-config.php
-sed -i "s/define( 'DB_USER', 'username_here' )\;/define( 'DB_USER', 'admin' )\;/" /var/www/wordpress/wp-config.php
-sed -i "s/define( 'DB_PASSWORD', 'password_here' )\;/define( 'DB_PASSWORD', '123' )\;/" /var/www/wordpress/wp-config.php
+sed -i "s/define( 'DB_NAME', 'database_name_here' )\;/define( 'DB_NAME', '$namaDb' )\;/" /var/www/wordpress/wp-config.php
+sed -i "s/define( 'DB_USER', 'username_here' )\;/define( 'DB_USER', '$userDb' )\;/" /var/www/wordpress/wp-config.php
+sed -i "s/define( 'DB_PASSWORD', 'password_here' )\;/define( 'DB_PASSWORD', '$passDb' )\;/" /var/www/wordpress/wp-config.php
 
 echo -e "\nInstalasi & konfigurasi paket-paket LAMP telah selesai!\n"
 
@@ -400,7 +401,7 @@ echo "Sedang melakukan instalasi & konfigurasi cacti..."
 apt-get install -qq -y cacti snmp snmpd rrdtool
 
 chown -R www-data:www-data /usr/share/cacti
-sed -i "s/agentaddress  127.0.0.1,\[\:\:1\]/agentaddress  udp\:$ipDebian\:161/" /etc/snmp/snmpd.conf
+sed -i "s/agentaddress  127.0.0.1,\[\:\:1\]/agentaddress  udp\:"$ipDebian"\:161/" /etc/snmp/snmpd.conf
 echo "rocommunity public "$ipDebian"" >> /etc/snmp/snmpd.conf
 systemctl restart snmpd
 
