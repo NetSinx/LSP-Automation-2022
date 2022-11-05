@@ -318,6 +318,7 @@ systemctl restart apache2
 cp /var/www/phpmyadmin/config.sample.inc.php /var/www/phpmyadmin/config.inc.php
 cp /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
 
+echo ""
 read -p "Masukkan nama user untuk database (contoh: yasin): " userDb
 read -p "Masukkan password untuk nama user database: " passDb
 read -p "Masukkan password konfirmasi untuk nama user database: " passDbConfirm
