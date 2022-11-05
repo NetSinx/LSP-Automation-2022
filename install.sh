@@ -421,7 +421,8 @@ apt-get install -qq -y cacti snmp snmpd rrdtool
 chown -R www-data:www-data /usr/share/cacti
 sed -i "s/agentaddress  127.0.0.1,\[\:\:1\]/agentaddress  udp\:"$ipDebian"\:161/" /etc/snmp/snmpd.conf
 
-if [[ ! (cat /etc/snmp/snmpd.conf | grep "rocommunity public "$ipDebian"") ]];
+$rocommunity=$(cat /etc/snmp/snmpd.conf | grep "rocommunity public "$ipDebian"")
+if [[ ! $rocommunity ]];
 then
 echo "rocommunity public "$ipDebian"" >> /etc/snmp/snmpd.conf
 fi
