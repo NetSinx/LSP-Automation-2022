@@ -381,9 +381,35 @@ echo "Sedang melakukan instalasi & konfigurasi mail server..."
 apt-get install -qq -y postfix dovecot-imapd dovecot-pop3d roundcube
 
 echo "home_mailbox = Maildir/" >> /etc/postfix/main.cf
+maildirmake.dovecot /etc/skel/Maildir
 sed -i "s/\#disable_plaintext_auth = yes/disable_plaintext_auth = yes/" /etc/dovecot/conf.d/10-auth.conf
 sed -i "s/\#   mail_location = maildir\:\~\/Maildir/mail_location = maildir\:\~\/Maildir/" /etc/dovecot/conf.d/10-mail.conf
 sed -i "s/mail_location = mbox\:\~\/mail\:INBOX=\/var\/mail\/\%u/mail_location = mbox\:\~\/mail\:INBOX=\/var\/mail\/\%u/" /etc/dovecot/conf.d/10-mail.conf
+
+read -p "Tambahkan user pertama untuk mail: " userMail1
+read -p "Masukkan password untuk user pertama mail: " passMail1
+read -p "Tambahkan user kedua untuk mail: " userMail2
+read -p "Masukkan password untuk user kedua mail: " passMail2
+
+checkUserMail1=$(cat /etc/passwd | awk -F ':' '{print $1}' | grep $userMail1)
+checkUserMail2=$(cat /etc/passwd | awk -F ':' '{print $1}' | grep $userMail2)
+if [[ ! $checkUserMail1 && ! $checkUserMail2 ]];
+then
+useradd -m $userMail1 
+useradd -m $userMail2 
+echo -e ""$passMail1"\n"$passMail1"" | passwd $userMail1
+echo -e ""$passMail2"\n"$passMail2"" | passwd $userMail2
+elif [[ ! $checkUserMail1 ]];
+then
+useradd -m $userMail1 
+echo -e ""$passMail1"\n"$passMail1"" | passwd $userMail1
+elif [[ ! $checkUserMail2 ]];
+then
+useradd -m $userMail2
+echo -e ""$passMail2"\n"$passMail2"" | passwd $userMail2
+else
+echo "Kedua user sudah dibuat!"
+fi
 
 systemctl restart postfix dovecot
 
@@ -401,7 +427,13 @@ apt-get install -qq -y cacti snmp snmpd rrdtool
 
 chown -R www-data:www-data /usr/share/cacti
 sed -i "s/agentaddress  127.0.0.1,\[\:\:1\]/agentaddress  udp\:$ipDebian\:161/" /etc/snmp/snmpd.conf
+
+rocommunity=$(cat /etc/snmp/snmpd.conf | grep "rocommunity public "$ipDebian"")
+if [[ ! $rocommunity ]];
+then
 echo "rocommunity public "$ipDebian"" >> /etc/snmp/snmpd.conf
+fi
+
 systemctl restart snmpd
 
 echo -e "\nInstalasi & konfigurasi paket-paket cacti telah selesai!\n"
