@@ -402,7 +402,7 @@ maildirmake.dovecot /etc/skel/Maildir
 
 sed -i "s/\#disable_plaintext_auth = yes/disable_plaintext_auth = yes/" /etc/dovecot/conf.d/10-auth.conf
 sed -i "s/\#   mail_location = maildir\:\~\/Maildir/mail_location = maildir\:\~\/Maildir/" /etc/dovecot/conf.d/10-mail.conf
-sed -i "s/mail_location = mbox\:\~\/mail\:INBOX=\/var\/mail\/\%u/mail_location = mbox\:\~\/mail\:INBOX=\/var\/mail\/\%u/" /etc/dovecot/conf.d/10-mail.conf
+sed -i "s/mail_location = mbox\:\~\/mail\:INBOX=\/var\/mail\/\%u/\#mail_location = mbox\:\~\/mail\:INBOX=\/var\/mail\/\%u/" /etc/dovecot/conf.d/10-mail.conf
 
 read -p "Tambahkan user pertama untuk mail: " userMail1
 read -p "Masukkan password untuk user pertama mail: " passMail1
