@@ -394,7 +394,6 @@ read -p "Masukkan password untuk user kedua: " passMail2
 
 useradd -m $userMail1
 useradd -m $userMail2
-
 echo -e "$passMail1\n$passMail1" | passwd $userMail1
 echo -e "$passMail2\n$passMail2" | passwd $userMail2
 
