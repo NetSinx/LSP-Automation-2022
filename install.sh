@@ -190,6 +190,7 @@ checkWp=$(ls /var/www/ | grep wordpress)
 checkPma=$(ls /var/www/ | grep phpmyadmin)
 if [[ ! $checkWp && ! $checkPma ]];
 then
+    apt-get install -qq -y wget
     wget -q https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.tar.gz
     wget -q https://wordpress.org/wordpress-6.0.3.tar.gz
     tar -zxf phpMyAdmin-5.2.0-all-languages.tar.gz
