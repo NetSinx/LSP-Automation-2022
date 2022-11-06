@@ -319,6 +319,7 @@ cp /var/www/phpmyadmin/config.sample.inc.php /var/www/phpmyadmin/config.inc.php
 cp /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
 
 echo ""
+read -p "Masukkan nama database untuk wordpress: " namaDb
 read -p "Masukkan nama user untuk database (contoh: yasin): " userDb
 read -p "Masukkan password untuk nama user database: " passDb
 read -p "Masukkan password konfirmasi untuk nama user database: " passDbConfirm
@@ -340,7 +341,7 @@ fi
 chown -R www-data:www-data /var/www/wordpress
 chown -R www-data:www-data /var/www/phpmyadmin
 
-mysql -e "create database if not exists wordpress;"
+mysql -e "create database if not exists "$namaDb";"
 mysql -s < pma.sql
 mysql -s phpmyadmin < /var/www/phpmyadmin/sql/create_tables.sql
 
@@ -370,9 +371,9 @@ sed -i "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['central_columns'\] = 'pma__central_co
 sed -i "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['designer_settings'\] = 'pma__designer_settings'\;/\$cfg\['Servers'\]\[\$i\]\['designer_settings'\] = 'pma__designer_settings'\;/" /var/www/phpmyadmin/config.inc.php
 sed -i "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['export_templates'\] = 'pma__export_templates'\;/\$cfg\['Servers'\]\[\$i\]\['export_templates'\] = 'pma__export_templates'\;/" /var/www/phpmyadmin/config.inc.php
 
-sed -i "s/define( 'DB_NAME', 'database_name_here' )\;/define( 'DB_NAME', 'wordpress' )\;/" /var/www/wordpress/wp-config.php
-sed -i "s/define( 'DB_USER', 'username_here' )\;/define( 'DB_USER', 'admin' )\;/" /var/www/wordpress/wp-config.php
-sed -i "s/define( 'DB_PASSWORD', 'password_here' )\;/define( 'DB_PASSWORD', '123' )\;/" /var/www/wordpress/wp-config.php
+sed -i "s/define( 'DB_NAME', 'database_name_here' )\;/define( 'DB_NAME', '$namaDb' )\;/" /var/www/wordpress/wp-config.php
+sed -i "s/define( 'DB_USER', 'username_here' )\;/define( 'DB_USER', '$userDb' )\;/" /var/www/wordpress/wp-config.php
+sed -i "s/define( 'DB_PASSWORD', 'password_here' )\;/define( 'DB_PASSWORD', '$passDb' )\;/" /var/www/wordpress/wp-config.php
 
 echo -e "\nInstalasi & konfigurasi paket-paket LAMP telah selesai!\n"
 
@@ -380,8 +381,25 @@ echo -e "======= STEP 4 - INSTALASI & KONFIGURASI MAIL ========\n"
 echo "Sedang melakukan instalasi & konfigurasi mail server..."
 apt-get install -qq -y postfix dovecot-imapd dovecot-pop3d roundcube
 
+maildir=$(cat /etc/postfix/main.cf | grep "home_mailbox")
+if [[ ! $maildir ]];
+then
 echo "home_mailbox = Maildir/" >> /etc/postfix/main.cf
+fi
+
+read -p "Tambahkan user pertama untuk mail: " userMail1
+read -p "Masukkan password untuk user pertama: " passMail1
+read -p "Tambahkan user kedua untuk mail: " userMail2
+read -p "Masukkan password untuk user kedua: " passMail2
+
+useradd -m $userMail1
+useradd -m $userMail2
+
+echo -e "$passMail1\n$passMail1" | passwd $userMail1
+echo -e "$passMail2\n$passMail2" | passwd $userMail2
+
 maildirmake.dovecot /etc/skel/Maildir
+
 sed -i "s/\#disable_plaintext_auth = yes/disable_plaintext_auth = yes/" /etc/dovecot/conf.d/10-auth.conf
 sed -i "s/\#   mail_location = maildir\:\~\/Maildir/mail_location = maildir\:\~\/Maildir/" /etc/dovecot/conf.d/10-mail.conf
 sed -i "s/mail_location = mbox\:\~\/mail\:INBOX=\/var\/mail\/\%u/mail_location = mbox\:\~\/mail\:INBOX=\/var\/mail\/\%u/" /etc/dovecot/conf.d/10-mail.conf
