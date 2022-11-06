@@ -379,7 +379,7 @@ echo -e "\nInstalasi & konfigurasi paket-paket LAMP telah selesai!\n"
 
 echo -e "======= STEP 4 - INSTALASI & KONFIGURASI MAIL ========\n"
 echo "Sedang melakukan instalasi & konfigurasi mail server..."
-apt-get install -qq -y postfix dovecot-imapd dovecot-pop3d roundcube
+apt install -y postfix dovecot-imapd dovecot-pop3d roundcube
 
 maildir=$(cat /etc/postfix/main.cf | grep "home_mailbox")
 if [[ ! $maildir ]];
@@ -440,7 +440,7 @@ echo -e "\nInstalasi & konfigurasi paket-paket mail server telah selesai!\n"
 
 echo -e "======= STEP 5 - INSTALASI & KONFIGURASI CACTI ========\n"
 echo "Sedang melakukan instalasi & konfigurasi cacti..."
-apt-get install -qq -y cacti snmp snmpd rrdtool
+apt install -y cacti snmp snmpd rrdtool
 
 chown -R www-data:www-data /usr/share/cacti
 sed -i "s/agentaddress  127.0.0.1,\[\:\:1\]/agentaddress  udp\:$ipDebian\:161/" /etc/snmp/snmpd.conf
