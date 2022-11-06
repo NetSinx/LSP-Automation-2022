@@ -413,17 +413,17 @@ checkUserMail1=$(cat /etc/passwd | awk -F ':' '{print $1}' | grep $userMail1)
 checkUserMail2=$(cat /etc/passwd | awk -F ':' '{print $1}' | grep $userMail2)
 if [[ ! $checkUserMail1 && ! $checkUserMail2 ]];
 then
-useradd -m $userMail1 
-useradd -m $userMail2 
+    useradd -m $userMail1 
+    useradd -m $userMail2 
 echo -e ""$passMail1"\n"$passMail1"" | passwd $userMail1
 echo -e ""$passMail2"\n"$passMail2"" | passwd $userMail2
 elif [[ ! $checkUserMail1 ]];
 then
-useradd -m $userMail1 
+    useradd -m $userMail1 
 echo -e ""$passMail1"\n"$passMail1"" | passwd $userMail1
 elif [[ ! $checkUserMail2 ]];
 then
-useradd -m $userMail2
+    useradd -m $userMail2
 echo -e ""$passMail2"\n"$passMail2"" | passwd $userMail2
 else
 echo "Kedua user sudah dibuat!"
