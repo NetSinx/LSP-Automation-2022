@@ -413,13 +413,13 @@ checkUserMail1=$(cat /etc/passwd | awk -F ':' '{print $1}' | grep $userMail1)
 checkUserMail2=$(cat /etc/passwd | awk -F ':' '{print $1}' | grep $userMail2)
 if [[ ! $checkUserMail1 && ! $checkUserMail2 ]];
 then
-    useradd -m $userMail1 
-    useradd -m $userMail2 
+    useradd -m $userMail1
+    useradd -m $userMail2
 echo -e ""$passMail1"\n"$passMail1"" | passwd $userMail1
 echo -e ""$passMail2"\n"$passMail2"" | passwd $userMail2
 elif [[ ! $checkUserMail1 ]];
 then
-    useradd -m $userMail1 
+    useradd -m $userMail1
 echo -e ""$passMail1"\n"$passMail1"" | passwd $userMail1
 elif [[ ! $checkUserMail2 ]];
 then
@@ -428,6 +428,8 @@ echo -e ""$passMail2"\n"$passMail2"" | passwd $userMail2
 else
 echo "Kedua user sudah dibuat!"
 fi
+
+chown -R www-data:www-data /var/lib/roundcube
 
 systemctl restart postfix dovecot
 
@@ -444,7 +446,18 @@ echo "Sedang melakukan instalasi & konfigurasi cacti..."
 apt install -y cacti snmp snmpd rrdtool
 
 chown -R www-data:www-data /usr/share/cacti
-sed -i "s/agentaddress  127.0.0.1,\[\:\:1\]/agentaddress  udp\:$ipDebian\:161/" /etc/snmp/snmpd.conf
+
+case $versiDebian in
+    '11')
+        sed -i "s/agentaddress  127.0.0.1,\[\:\:1\]/agentaddress  udp\:$ipDebian\:161/" /etc/snmp/snmpd.conf
+     ;;
+    '10')
+        sed -i "s/agentaddress  udp\:127.0.0.1\:161/agentaddress  udp\:$ipDebian\:161/" /etc/snmp/snmpd.conf
+     ;;
+     *)
+        echo "Rocommunity SNMP telah dikonfigurasi!"
+     ;;
+esac
 
 rocommunity=$(cat /etc/snmp/snmpd.conf | grep "rocommunity public "$ipDebian"")
 if [[ ! $rocommunity ]];
